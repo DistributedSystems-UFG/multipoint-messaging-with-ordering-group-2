@@ -180,7 +180,7 @@ wheels = [
 ]
 
 [[package]]
-name = "multipoint-messaging-sequential-consistency-estevao-arthur-gabrielle-rafael"
+name = "multipoint-messaging-ordering-group"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

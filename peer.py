@@ -54,7 +54,7 @@ def _recv_framed(sock):
 class Peer:
     def __init__(self, port=None):
         self.host = "0.0.0.0"
-        self.port = port if port is not None else int(input("Porta deste peer: "))
+        self.port = port if port is not None else 5679
         self.name = "peer_" + str(self.port) + "_" + str(uuid.uuid4())[:4]
         self.address = f"{get_public_ip()}:{self.port}"
         self.peers = set()
@@ -72,7 +72,7 @@ class Peer:
         self.out_conns = {}             # address -> socket
         self.io_lock = threading.Lock()
 
-        self.conn = duckdb.connect(f"peer_{self.port}.db")
+        self.conn = duckdb.connect(f"peer_{self.address}.db")
         self._init_database()
 
     def _init_database(self):

@@ -1,5 +1,5 @@
 [project]
-name = "multipoint-messaging-sequential-consistency-estevao-arthur-gabrielle-rafael"
+name = "multipoint-messaging-ordering_group"
 version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.12"
