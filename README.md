@@ -78,8 +78,6 @@ garantir isso:
 - `SYNC_REQUEST` / `SYNC_DATA` — transferência do log já entregue (committed) para um
   peer que entra depois.
 
-(O registro/descoberta com o Serviço de Nomes continua em ZeroMQ; isto não mudou.)
-
 ## 5. Mudanças feitas no `peer.py`
 
 - **Camada de rede reescrita**: conexões persistentes por destino + framing por
@@ -139,9 +137,7 @@ Rodados no ambiente local (6 réplicas no mesmo processo, com concorrência real
 1. `config.py`: `NS_HOST` = IP público da máquina do Serviço de Nomes; `IP_MODE = "aws"`.
 2. Libere no Security Group a porta `NS_PORT` (5555) na máquina do Serviço de Nomes e
    a porta TCP de cada peer nas respectivas instâncias.
-3. Suba o `name_service.py` em uma instância; suba 6 `peer.py` em **regiões
-   diferentes** (ex.: incluir `sa-east-1` cria contraste de latência).
-4. Use um `tmux` com 6 painéis (um SSH por região) para ver todos ao mesmo tempo.
+3. Suba o `name_service.py` em uma instância; suba 6 `peer.py`
 5. Cenários sugeridos: inserts concorrentes dos 6; mensagem atrasada (`tc/netem`);
    cadeia causal; entrada de um 7º peer. Em todos, finalize com `select`/`hash` em cada
    painel e mostre que os **6 hashes são iguais** — prova visual da consistência.

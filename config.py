@@ -7,11 +7,11 @@
 
 # Local: "127.0.0.1"
 # AWS:   IP publico (ou DNS) da maquina que roda o name_service.py
-NS_HOST = "127.0.0.1"
-NS_PORT = 5555
+NS_HOST = "44.200.104.198"
+NS_PORT = 5678
 
 # Como cada peer descobre o PROPRIO IP para se anunciar.
 # Nao e um endereco - e apenas um modo de operacao:
 #   "local" -> usa 127.0.0.1 (todos os peers na mesma maquina)
 #   "aws"   -> detecta o IP publico da instancia em tempo de execucao
-IP_MODE = "local"
+IP_MODE = "aws"
