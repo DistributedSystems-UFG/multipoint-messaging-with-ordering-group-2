@@ -103,23 +103,7 @@ Cada peer calcula um **hash SHA-256** sobre a sequência entregue
 **mesmo hash** e o mesmo número de entregues, a ordem total foi mantida. O `select`
 mostra o log ordenado por `seq`, idêntico em todos os nós.
 
-## 7. Testes automatizados executados
-
-Rodados no ambiente local (6 réplicas no mesmo processo, com concorrência real):
-
-- **`test_total_order.py`** — 6 peers, 18 inserts disparados concorrentemente por
-  vários peers. Resultado: as 6 réplicas convergem para `seq=18` e **hash idêntico**;
-  a ordem global **não** é a ordem de inserção (houve reordenação real, resolvida da
-  mesma forma em todos). Executado 5× sem divergência.
-- **`test_causal_join.py`** — cadeia causal (tx1 antes de tx2 em todas as réplicas) e
-  entrada tardia de um 4º peer, que sincroniza o log e passa a participar; os 4
-  convergem para hash único.
-- **`test_delay.py`** — atraso artificial no envio de um peer. A mensagem atrasada
-  (de menor timestamp) é colocada na **posição global correta** (início), não no fim;
-  todas as réplicas terminam com a mesma ordem. Este teste foi o que revelou e depois
-  validou a correção do FIFO descrita na seção 3.
-
-## 8. Pressupostos e limitações
+## 7. Pressupostos e limitações
 
 - **Membership estável durante a operação**: a regra "confirmado por todos" usa a
   visão de grupo de cada peer. Para a ordem total valer, suba todos os peers e deixe a
@@ -132,11 +116,12 @@ Rodados no ambiente local (6 réplicas no mesmo processo, com concorrência real
 - **Desempenho**: enviar sob o lock serializa as transmissões (necessário para o
   FIFO). Para a carga interativa do trabalho é irrelevante; consistência é o objetivo.
 
-## 9. Implantação e demonstração na AWS
+## 8. Implantação e demonstração na AWS (6 regiões)
 
 1. `config.py`: `NS_HOST` = IP público da máquina do Serviço de Nomes; `IP_MODE = "aws"`.
-2. Libere no Security Group a porta `NS_PORT` (5555) na máquina do Serviço de Nomes e
+2. Libere no Security Group a porta `NS_PORT` (5678) na máquina do Serviço de Nomes e
    a porta TCP de cada peer nas respectivas instâncias.
-3. A arquitetura utilizada na demonstração consistiu em um Name Service na região `us-east-1` (N. Virginia) juntamente com uma parte dos peers, e os demais peers executados em `us-west-2` (Oregon) para demonstrar que o algoritmo de consenso suporta a diferença de latência geográfica.
-4. Use terminais (um SSH por peer) para ver todos ao mesmo tempo.
-5. Cenários sugeridos: inserts concorrentes dos peers; entrada de novos peers. Em todos, finalize com `select`/`hash` em cada painel e mostre que os hashes são iguais — prova visual da consistência.
+3. Suba o `name_service.py` em uma instância; e suba os denmais peers, `peer.py`, em outras instâncias.
+5. Cenários sugeridos: inserts concorrentes de peers; mensagem atrasada (`tc/netem`);
+   cadeia causal; entrada de um 6º peer. E `select`/`hash` em cada
+   peer mostrando que os **hashes são iguais** — prova visual da consistência.
