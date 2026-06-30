@@ -357,13 +357,17 @@ class Peer:
         while True:
             cmd = input(">> ").strip()
             if cmd.startswith("insert"):
+                parts = cmd.split()
+                if len(parts) != 5:
+                    print("Uso correto: insert <id> <remetente> <destinatario> <valor>")
+                    print("Exemplo: insert 1 Alice Bob 100")
+                    continue
                 try:
-                    _, id, sender, receiver, amount = cmd.split()
-                    tx = {"id": int(id), "sender": sender,
-                          "receiver": receiver, "amount": float(amount)}
+                    tx = {"id": int(parts[1]), "sender": parts[2],
+                          "receiver": parts[3], "amount": float(parts[4])}
                     self.multicast_insert(tx)
                 except ValueError:
-                    print("uso: insert <id> <remetente> <destinatario> <valor>")
+                    print("Erro: ID e valor precisam ser números.")
             elif cmd == "select":
                 self._print_log()
             elif cmd in ("hash", "estado"):

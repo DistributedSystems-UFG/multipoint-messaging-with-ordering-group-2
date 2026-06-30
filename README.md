@@ -132,12 +132,11 @@ Rodados no ambiente local (6 réplicas no mesmo processo, com concorrência real
 - **Desempenho**: enviar sob o lock serializa as transmissões (necessário para o
   FIFO). Para a carga interativa do trabalho é irrelevante; consistência é o objetivo.
 
-## 9. Implantação e demonstração na AWS (6 regiões)
+## 9. Implantação e demonstração na AWS
 
 1. `config.py`: `NS_HOST` = IP público da máquina do Serviço de Nomes; `IP_MODE = "aws"`.
 2. Libere no Security Group a porta `NS_PORT` (5555) na máquina do Serviço de Nomes e
    a porta TCP de cada peer nas respectivas instâncias.
-3. Suba o `name_service.py` em uma instância; suba 6 `peer.py`
-5. Cenários sugeridos: inserts concorrentes dos 6; mensagem atrasada (`tc/netem`);
-   cadeia causal; entrada de um 7º peer. Em todos, finalize com `select`/`hash` em cada
-   painel e mostre que os **6 hashes são iguais** — prova visual da consistência.
+3. A arquitetura utilizada na demonstração consistiu em um Name Service na região `us-east-1` (N. Virginia) juntamente com uma parte dos peers, e os demais peers executados em `us-west-2` (Oregon) para demonstrar que o algoritmo de consenso suporta a diferença de latência geográfica.
+4. Use terminais (um SSH por peer) para ver todos ao mesmo tempo.
+5. Cenários sugeridos: inserts concorrentes dos peers; entrada de novos peers. Em todos, finalize com `select`/`hash` em cada painel e mostre que os hashes são iguais — prova visual da consistência.

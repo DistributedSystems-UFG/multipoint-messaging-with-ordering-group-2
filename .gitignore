@@ -2,3 +2,5 @@
 /__pycache__
 test_total_order.py
 test_delay.py
+*.db
+*.db.wal
